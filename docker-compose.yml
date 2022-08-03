@@ -2,7 +2,7 @@ version: '3.8'
 services:
   front:
     build: ./client
-    container_name: nextjs-client
+    container_name: nextjs-app
     volumes:
       - ./:/usr/src/app
     command: sh -c "cd client && yarn dev"
@@ -11,7 +11,7 @@ services:
 
   backend:
     build: ./server
-    container_name: fastapi-server
+    container_name: fastapi-app
     volumes:
       - ./:/usr/src/app
     command: 'uvicorn server.fast_api.main:app --reload --host 0.0.0.0'

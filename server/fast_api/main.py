@@ -1,8 +1,18 @@
+from http import server
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 
-app = FastAPI()
+from .routers import items, users
+
+app = FastAPI(
+    title="FastAPI Sample App",
+    description="FastAPIのサンプル",
+    version="0.1.0",
+    servers=[
+        # generate-clientのBASE URLに関わる
+        {"url": "http://localhost:8000", "description": "ローカル環境"},
+    ]
+)
 
 # CORS設定
 origins = [
@@ -17,26 +27,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(items.router)
+app.include_router(users.router)
+
 
 @app.get("/")
 def read_root():
-    return {"id": "a12345", "name": "Steve Nobs"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
-
-
-# リクエストボディの型を定義
-class Item(BaseModel):
-    name: str
-    price: float
-
-
-@app.get("/items/", response_model=list[Item])  # response_modelで返却する型を指定できる
-async def get_items():
-    return [
-        {"name": "Plumbus", "price": 3},
-        {"name": "Portal Gun", "price": 9001},
-    ]
+    return {"HELLO": "WORLD", "name": "Steve Nobs"}

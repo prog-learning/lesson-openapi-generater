@@ -1,15 +1,15 @@
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
+import { Item, ItemsService } from '../src/client';
 
 const Home: NextPage = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<Item[]>([]);
 
   useEffect(() => {
     void (async () => {
-      const response = await fetch('http://localhost:8000/');
-      const data = await response.json();
-      console.log(data);
-      setData(data);
+      const response = await ItemsService.getItemsItemsGet();
+      console.log(response);
+      setData(response);
     })();
   }, []);
 
